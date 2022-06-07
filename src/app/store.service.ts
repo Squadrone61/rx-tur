@@ -7,6 +7,7 @@ import {
   BehaviorSubject,
   tap,
 } from 'rxjs';
+import { startWith } from 'rxjs/operators';
 
 export type NumberKeyOf<T> = {
   [K in keyof T]: T[K] extends number ? K : null;
@@ -23,7 +24,7 @@ export function storeDefaults<T>(): StoreOptions<T> {
   return { desc: true, pageSize: 5, page: 1 };
 }
 
-export function paginate<T>(array: T[], size:number, current:number) {
+export function paginate<T>(array: T[], size: number, current: number) {
   return array.slice((current - 1) * size, current * size);
 }
 
@@ -36,24 +37,26 @@ export class StoreService<T extends { createdAt: number }> {
 
   getStore(key: string) {
     const data = this.source$.pipe(
+      startWith({
+        key,
+        newValue: localStorage.getItem(key),
+      }),
       filter((data: StorageEvent) => data.key === key),
       map<StorageEvent, T[]>(({ newValue }: StorageEvent) =>
         JSON.parse(newValue)
       )
     );
     return combineLatest([data, this._opts]).pipe(
-      tap((_)=>console.log(_)),
-      map(([list, _opts]) =>{
+      map(([list, _opts]) => {
         list.sort((a, b) => {
           const x =
-            (b[_opts?.sortKey || 'createdAt'] as unknown as number) -
-            (a[_opts?.sortKey || 'createdAt'] as unknown as number);
-          return _opts?.desc ? x : -x;
-        })
+            (a[_opts?.sortKey || 'createdAt'] as unknown as number) -
+            (b[_opts?.sortKey || 'createdAt'] as unknown as number);
+          return _opts?.desc ? -x : x;
+        });
 
-        return paginate(list,_opts.pageSize,_opts.page)
-      }
-      )
+        return paginate(list, _opts.pageSize, _opts.page);
+      })
     );
   }
 

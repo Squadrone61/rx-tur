@@ -1,0 +1,16 @@
+<button (click)="remove()">rem</button>
+
+<label for="cars">Sırala:</label>
+<select name="cars" id="cars" [ngModel]="0" (ngModelChange)="pickSort($event)">
+  <option [value]="0" selected>Default</option>
+  <option [value]="1">Puan (Artan)</option>
+  <option [value]="2">Puan (Azalan)</option>
+</select>
+
+<input
+  type="number"
+  [ngModel]="1"
+  min="1"
+  (ngModelChange)="changePage($event)"
+/>
+<pre>{{ list$ | async | json }}</pre>
