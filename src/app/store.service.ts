@@ -62,7 +62,6 @@ export class StoreService<T extends { createdAt: number }> {
             (b[_opts?.sortKey || 'createdAt'] as unknown as number);
           return _opts?.desc ? -x : x;
         });
-        console.log(list);
         return {
           data: paginate(list, _opts.pageSize, _opts.pageIndex),
           length: list.length,
