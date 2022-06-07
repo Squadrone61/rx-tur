@@ -44,6 +44,10 @@ export class StoreService<T extends { createdAt: number }> {
   private _opts = new BehaviorSubject<StoreOptions<T>>(storeDefaults<T>());
 
   getStore(key: string): Observable<Store<T>> {
+    const store = this.getStorage(key);
+    if (!store) {
+      localStorage.setItem(key, JSON.stringify([]));
+    }
     const data = this.source$.pipe(
       startWith({
         key,
@@ -116,6 +120,7 @@ export class StoreService<T extends { createdAt: number }> {
       ...opt,
     });
   }
+
   private getStorage(storeKey: string): T[] {
     return JSON.parse(localStorage.getItem(storeKey));
   }
