@@ -10,9 +10,9 @@ import { Data, mockData } from '../data.model';
 import { StoreOptions, StoreService } from '../store.service';
 
 const sortingOptions = new Map<number, Partial<StoreOptions<Data>>>([
-  [0, { sortKey: 'createdAt', desc: false }],
-  [1, { sortKey: 'score', desc: false }],
-  [2, { sortKey: 'score', desc: true }],
+  [0, { sortKey: 'createdAt', desc: true, pageIndex: 0, pageSize: 5 }],
+  [1, { sortKey: 'score', desc: false, pageIndex: 0, pageSize: 5 }],
+  [2, { sortKey: 'score', desc: true, pageIndex: 0, pageSize: 5 }],
 ]);
 
 @Component({
@@ -34,8 +34,8 @@ export class ListComponent {
   // MatPaginator Inputs
   pageSize = 5;
   pageSizeOptions: number[] = [5, 10, 20];
-
-  list$ = this.store.getStore('list');
+  storeName = 'list';
+  list$ = this.store.getStore(this.storeName);
 
   constructor(private store: StoreService<Data>) {
     store.setOptions(sortingOptions.get(0));
@@ -47,11 +47,11 @@ export class ListComponent {
       score: Math.random() * 100,
       createdAt: Date.now(),
     };
-    this.store.add('list', value);
+    this.store.add(this.storeName, value);
   }
 
   remove(item: Data) {
-    this.store.remove('list', 'createdAt', item.createdAt);
+    this.store.remove(this.storeName, 'createdAt', item.createdAt);
   }
 
   pickSort(sort: number) {
@@ -62,5 +62,11 @@ export class ListComponent {
     this.store.setOptions({ pageIndex, pageSize });
   }
 
-  changeScore($event) {}
+  changeScore({ item, change }: { item: Data; change: number }) {
+    item = {
+      ...item,
+      score: item.score + change,
+    };
+    this.store.edit(this.storeName, 'createdAt', item);
+  }
 }

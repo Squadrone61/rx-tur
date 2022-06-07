@@ -1,8 +1,17 @@
 <a mat-stroked-button routerLink="/">Liste</a>
 <br />
-<mat-form-field>
-  <mat-label>Otel Adı</mat-label>
-  <input matInput placeholder="Falancı Oteli" [(ngModel)]="name" />
-</mat-form-field>
+<form (submit)="add()">
+  <mat-form-field>
+    <mat-label>Otel Adı</mat-label>
+    <input
+      name="name"
+      matInput
+      placeholder="Falancı Oteli"
+      [(ngModel)]="name"
+    />
+  </mat-form-field>
+  <button [ngClass]="{ success: done }" type="submit" mat-raised-button>
+    {{ done ? '✔ Eklendi' : 'Ekle' }}
+  </button>
+</form>
 <br />
-<button mat-stroked-button (click)="add()">Ekle</button>

@@ -62,7 +62,7 @@ export class StoreService<T extends { createdAt: number }> {
             (b[_opts?.sortKey || 'createdAt'] as unknown as number);
           return _opts?.desc ? -x : x;
         });
-
+        console.log(list);
         return {
           data: paginate(list, _opts.pageSize, _opts.pageIndex),
           length: list.length,
@@ -74,16 +74,25 @@ export class StoreService<T extends { createdAt: number }> {
   }
 
   add(storeKey: string, value: T) {
-    const arr: T[] = JSON.parse(localStorage.getItem(storeKey));
+    const arr = this.getStorage(storeKey);
     arr.push(value);
     this.setStore(storeKey, arr);
   }
 
   remove(storeKey: string, key: keyof T, value: T[typeof key]) {
-    const arr: T[] = JSON.parse(localStorage.getItem(storeKey));
+    const arr = this.getStorage(storeKey);
     const i = arr.findIndex((item) => item[key] === value);
     if (i > -1) {
       arr.splice(i, 1);
+      this.setStore(storeKey, arr);
+    }
+  }
+
+  edit(storeKey: string, key: keyof T, newValue: T) {
+    const arr = this.getStorage(storeKey);
+    const i = arr.findIndex((item) => item[key] === newValue[key]);
+    if (i > -1) {
+      arr.splice(i, 1, newValue);
       this.setStore(storeKey, arr);
     }
   }
@@ -107,5 +116,8 @@ export class StoreService<T extends { createdAt: number }> {
       ...this._opts.value,
       ...opt,
     });
+  }
+  private getStorage(storeKey: string): T[] {
+    return JSON.parse(localStorage.getItem(storeKey));
   }
 }
