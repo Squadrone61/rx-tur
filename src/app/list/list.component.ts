@@ -28,6 +28,14 @@ const sortingOptions = new Map<number, Partial<StoreOptions<Data>>>([
     RouterModule,
   ],
   templateUrl: './list.component.html',
+  styles: [
+    `.container{
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }`,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent {

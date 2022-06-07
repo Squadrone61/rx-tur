@@ -8,3 +8,8 @@ body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
+
+/*sola dayalı paginator olsun*/
+.mat-paginator-container {
+  justify-content: flex-start !important;
+}

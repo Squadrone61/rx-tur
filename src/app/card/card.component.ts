@@ -25,7 +25,7 @@ import { Data } from '../data.model';
   styles: [
     `
     .card {
-      max-width: 400px;
+      width: 350px;
       margin-bottom: 8px;
     }
     .deleteBtn{
@@ -41,7 +41,7 @@ import { Data } from '../data.model';
     <mat-card-title-group>
       <img mat-card-md-image src="https://www.pngmart.com/files/16/Silhouette-Hotel-Building-PNG-File.png" >
       <mat-card-title>{{item?.name}}</mat-card-title>
-      <mat-card-subtitle>{{item?.score | number: '1.0-1' }}</mat-card-subtitle>
+      <mat-card-subtitle>{{item?.score | number: '1.0-1' }} Puan</mat-card-subtitle>
     </mat-card-title-group>
     
     <mat-card-actions>
