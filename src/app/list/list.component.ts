@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { Data, mockData } from '../data.model';
 import { StoreOptions, StoreService } from '../store.service';
 
@@ -13,7 +14,7 @@ const sortingOptions = new Map<string, Partial<StoreOptions<Data>>>([
 @Component({
   selector: 'app-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatPaginatorModule],
   templateUrl: './list.component.html',
 })
 export class ListComponent {

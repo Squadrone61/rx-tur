@@ -4,6 +4,7 @@ import { AppComponent } from './app/app.component';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { importProvidersFrom } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const ROUTES: Routes = [
   {
@@ -19,7 +20,7 @@ const ROUTES: Routes = [
 ];
 
 bootstrapApplication(AppComponent, {
-  providers: [importProvidersFrom(RouterModule.forRoot(ROUTES))],
+  providers: [BrowserAnimationsModule,importProvidersFrom(RouterModule.forRoot(ROUTES))],
 })
   .then((ref) => {
     // Ensure Angular destroys itself on hot reloads.
