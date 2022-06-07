@@ -6,6 +6,7 @@ import {
   combineLatest,
   BehaviorSubject,
   tap,
+  Observable,
 } from 'rxjs';
 import { startWith } from 'rxjs/operators';
 
@@ -13,19 +14,26 @@ export type NumberKeyOf<T> = {
   [K in keyof T]: T[K] extends number ? K : null;
 }[keyof T];
 
+export interface Store<T> {
+  data: T[];
+  pageIndex: number;
+  length: number;
+  pageSize: number;
+}
+
 export interface StoreOptions<T> {
   sortKey?: NumberKeyOf<T>;
   desc: boolean;
-  page: number;
+  pageIndex: number;
   pageSize: number;
 }
 
 export function storeDefaults<T>(): StoreOptions<T> {
-  return { desc: true, pageSize: 5, page: 1 };
+  return { desc: true, pageSize: 5, pageIndex: 1 };
 }
 
 export function paginate<T>(array: T[], size: number, current: number) {
-  return array.slice((current - 1) * size, current * size);
+  return array.slice(current * size, (current + 1) * size);
 }
 
 @Injectable({
@@ -35,7 +43,7 @@ export class StoreService<T extends { createdAt: number }> {
   private source$ = fromEvent(window, 'storage');
   private _opts = new BehaviorSubject<StoreOptions<T>>(storeDefaults<T>());
 
-  getStore(key: string) {
+  getStore(key: string): Observable<Store<T>> {
     const data = this.source$.pipe(
       startWith({
         key,
@@ -55,7 +63,12 @@ export class StoreService<T extends { createdAt: number }> {
           return _opts?.desc ? -x : x;
         });
 
-        return paginate(list, _opts.pageSize, _opts.page);
+        return {
+          data: paginate(list, _opts.pageSize, _opts.pageIndex),
+          length: list.length,
+          pageIndex: _opts.pageIndex,
+          pageSize: _opts.pageSize,
+        };
       })
     );
   }

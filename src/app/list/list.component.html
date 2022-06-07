@@ -1,16 +1,25 @@
-<button (click)="remove()">rem</button>
+<a mat-stroked-button routerLink="/add">Ekle</a>
+<br />
+<mat-form-field appearance="fill">
+  <mat-label>Sıralama</mat-label>
+  <mat-select [ngModel]="0" (ngModelChange)="pickSort($event)">
+    <mat-option [value]="1">Puan (Artan)</mat-option>
+    <mat-option [value]="2">Puan (Azalan)</mat-option>
+  </mat-select>
+</mat-form-field>
+<store-item
+  *ngFor="let item of (list$ | async)?.data"
+  [item]="item"
+  (scoreChange)="changeScore($event)"
+  (delete)="remove($event)"
+></store-item>
 
-<label for="cars">Sırala:</label>
-<select name="cars" id="cars" [ngModel]="0" (ngModelChange)="pickSort($event)">
-  <option [value]="0" selected>Default</option>
-  <option [value]="1">Puan (Artan)</option>
-  <option [value]="2">Puan (Azalan)</option>
-</select>
-
-<input
-  type="number"
-  [ngModel]="1"
-  min="1"
-  (ngModelChange)="changePage($event)"
-/>
-<pre>{{ list$ | async | json }}</pre>
+<ng-container *ngIf="list$ | async as list">
+  <mat-paginator
+    *ngIf="list.length > 5"
+    [pageSize]="list.pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [length]="list.length"
+    (page)="changePage($event)"
+  ></mat-paginator>
+</ng-container>

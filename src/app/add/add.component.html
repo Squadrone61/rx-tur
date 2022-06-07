@@ -1,1 +1,8 @@
-<button (click)="add()">add</button>
+<a mat-stroked-button routerLink="/">Liste</a>
+<br />
+<mat-form-field>
+  <mat-label>Otel Adı</mat-label>
+  <input matInput placeholder="Falancı Oteli" [(ngModel)]="name" />
+</mat-form-field>
+<br />
+<button mat-stroked-button (click)="add()">Ekle</button>

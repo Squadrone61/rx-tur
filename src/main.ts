@@ -20,7 +20,9 @@ const ROUTES: Routes = [
 ];
 
 bootstrapApplication(AppComponent, {
-  providers: [BrowserAnimationsModule,importProvidersFrom(RouterModule.forRoot(ROUTES))],
+  providers: [
+    importProvidersFrom(BrowserAnimationsModule, RouterModule.forRoot(ROUTES)),
+  ],
 })
   .then((ref) => {
     // Ensure Angular destroys itself on hot reloads.
